@@ -105,4 +105,3 @@ def get_stocks(stocks_list):
         stock_price = stock_info[0].get("price")
         stocks_prices.append({"stock": f"{stock}", "price": f"{stock_price}"})
     return stocks_prices
-
