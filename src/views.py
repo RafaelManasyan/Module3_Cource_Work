@@ -8,12 +8,9 @@ from utils import (
     get_currencies_info,
     get_greeting,
     get_stocks,
-    xlsx_converting,
 )
 
 load_dotenv()
-
-py_file = xlsx_converting()
 
 
 def main_list_func(pd_file):
@@ -31,6 +28,3 @@ def main_list_func(pd_file):
         "stock_prices": stocks_info,
     })
     return json.dumps(response, ensure_ascii=False)
-
-
-print(main_list_func(py_file))

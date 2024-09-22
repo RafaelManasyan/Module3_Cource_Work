@@ -106,5 +106,3 @@ def get_stocks(stocks_list):
         stocks_prices.append({"stock": f"{stock}", "price": f"{stock_price}"})
     return stocks_prices
 
-
-print(get_stocks(['AAPL', 'GOOGL']))
