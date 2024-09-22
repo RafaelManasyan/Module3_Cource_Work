@@ -2,6 +2,7 @@ import json
 import os
 from urllib.request import urlopen
 import logging
+import datetime
 
 import certifi
 import pandas as pd
@@ -20,9 +21,9 @@ logger.setLevel(logging.INFO)
 
 
 # functions for main_page
-def xlsx_converting(path):
+def xlsx_converting():
     """Function for converting excel-file to dataframe"""
-    PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", path)
+    PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", 'operations.xlsx')
     logger.info('Попытка конвертации эксель-файла в датафрейм')
     try:
         py_from_xlsx = pd.read_excel(PATH)
@@ -33,10 +34,10 @@ def xlsx_converting(path):
         return ["Path is not correct"]
 
 
-def get_greeting(user_date):
+def get_greeting():
     """Function for identify part of day"""
-    # logger.info('Определение времени дня')
-    hour_of_day = int(str(user_date[11:13]))
+    logger.info('Определение времени дня')
+    hour_of_day = int(str(datetime.datetime.now())[11:13])
     greeting = ""
     if 4 <= hour_of_day <= 10:
         greeting = "Доброе утро"
@@ -84,7 +85,7 @@ def get_currencies_info(currencies_list):
         response = requests.get("https://www.cbr-xml-daily.ru/daily_json.js")
         courses = response.json()
         for valute in currencies_list:
-            if courses["Valute"][valute]:
+            if courses["Valute"].get(valute):
                 currency_info.append({"currency": valute, "rate": courses["Valute"][valute]["Value"]})
         return currency_info
     except ConnectionError:
@@ -101,6 +102,9 @@ def get_stocks(stocks_list):
         response = urlopen(url, cafile=certifi.where())
         data = response.read().decode("utf-8")
         stock_info = json.loads(data)
-        stock_price = stock_info[0]["price"]
+        stock_price = stock_info[0].get("price")
         stocks_prices.append({"stock": f"{stock}", "price": f"{stock_price}"})
     return stocks_prices
+
+
+print(get_stocks(['AAPL', 'GOOGL']))

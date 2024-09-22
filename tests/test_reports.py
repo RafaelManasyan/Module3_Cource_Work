@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 
 from src.reports import spending_by_category
@@ -21,4 +23,5 @@ def test_spending_by_category(get_operations_df):
                              'Округление на инвесткопилку': [0.00],
                              'Сумма операции с округлением': [100.00]}, index=[1])
     expected['Дата операции'] = pd.to_datetime(expected['Дата операции'])
-    pd.testing.assert_frame_equal(actual, expected)
+    expected_json = expected.to_json(orient='records', date_format='iso')
+    assert json.loads(actual) == json.loads(expected_json)
